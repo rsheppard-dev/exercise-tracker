@@ -12,19 +12,27 @@ const exerciseSchema = new mongoose.Schema({
     },
     date: {
         type: Date,
-        default: new.Date
+        default: Date.now
+    },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'User'
     }
 })
 
-// convert user entered dates before storing
-exerciseSchema.pre('save', async function (next) {
+// hide version, exercise id and user id from being sent back to client
+exerciseSchema.methods.toJSON = function () {
     const exercise = this
+    const exerciseObject = exercise.toObject()
 
-    exercise.date = await new Date(exercise.date)
+    delete exerciseObject._id
+    delete exerciseObject.__v
+    delete exerciseObject.owner
 
-    next()
-})
+    return exerciseObject
+}
 
 const Exercise = mongoose.model('Exercise', exerciseSchema)
 
-mondule.exports = Exercise
+module.exports = Exercise
