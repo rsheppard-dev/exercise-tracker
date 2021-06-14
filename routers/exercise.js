@@ -33,13 +33,15 @@ router.post('/api/users/:id/exercises', fetchUserData, async (req, res) => {
 router.get('/api/users/:_id/logs', fetchUserData, async (req, res) => {
     const find = {}
     const user = req.user
-    const start = new Date(req.query.from)
-    const end = new Date(req.query.to)
-
+    const start = req.query.from && new Date(req.query.from)
+    const end = req.query.to && new Date(req.query.to)
+    
     if (start && end) find.date = {
         '$gte': start,
         '$lte': end
     }
+
+    console.log(find)
 
     try {
         await user.populate({
