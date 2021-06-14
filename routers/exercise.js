@@ -31,16 +31,22 @@ router.post('/api/users/:id/exercises', fetchUserData, async (req, res) => {
 
 // get a log of users exercises
 router.get('/api/users/:_id/logs', fetchUserData, async (req, res) => {
+    const find = {}
     const user = req.user
     const start = new Date(req.query.from)
     const end = new Date(req.query.to)
+
+    if (start && end) find.date = {
+        '$gte': start,
+        '$lte': end
+    }
 
     try {
         await user.populate({
             path: 'exercises',
             options: {
                 limit: parseInt(req.query.limit),
-                find: { date: {'$gte': start, '$lte': end}},
+                find,
                 sort: { date: -1 }
             }
         }).execPopulate()
