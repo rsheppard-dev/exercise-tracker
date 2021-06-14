@@ -1,6 +1,5 @@
 const express = require('express')
 const User = require('../models/user')
-const fetchUserData = require('../middleware/fetchUserData')
 
 const router = express.Router()
 
@@ -25,17 +24,6 @@ router.get('/api/users', async (req, res) => {
         })
 
         res.json(users)
-    } catch (error) {
-        res.json(error)
-    }
-})
-
-// get a log of users exercises
-router.get('/api/users/:id/logs', fetchUserData, async (req, res) => {
-    const user = req.user
-
-    try {
-        console.log(user)
     } catch (error) {
         res.json(error)
     }

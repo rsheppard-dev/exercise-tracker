@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
 })
 
 userSchema.virtual('exercises', {
-    ref: 'User',
+    ref: 'Exercise',
     localField: '_id',
     foreignField: 'owner'
 })

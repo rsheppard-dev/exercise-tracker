@@ -1,5 +1,4 @@
 const express = require('express')
-const moment = require('moment')
 const Exercise = require('../models/exercise')
 const fetchUserData = require('../middleware/fetchUserData')
 
@@ -23,7 +22,42 @@ router.post('/api/users/:id/exercises', fetchUserData, async (req, res) => {
             username: user.username,
             description: exercise.description,
             duration: exercise.duration,
-            date: exercise.date
+            date: exercise.date.toDateString()
+        })
+    } catch (error) {
+        res.json(error)
+    }
+})
+
+// get a log of users exercises
+router.get('/api/users/:_id/logs', fetchUserData, async (req, res) => {
+    const user = req.user
+    const start = new Date(req.query.from)
+    const end = new Date(req.query.to)
+
+    try {
+        await user.populate({
+            path: 'exercises',
+            options: {
+                limit: parseInt(req.query.limit),
+                find: { date: {'$gte': start, '$lte': end}},
+                sort: { date: -1 }
+            }
+        }).execPopulate()
+
+        const exerciseLog = user.exercises.map(exercise => {
+            return {
+                description: exercise.description,
+                duration: exercise.duration,
+                date: exercise.date.toDateString()
+            }
+        })        
+        
+        res.json({
+            _id: user._id,
+            username: user.username,
+            count: user.exercises.length,
+            log: exerciseLog
         })
     } catch (error) {
         res.json(error)
