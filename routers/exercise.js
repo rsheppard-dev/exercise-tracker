@@ -17,7 +17,7 @@ router.post('/api/users/:id/exercises', fetchUserData, async (req, res) => {
     
     try {
         await exercise.save()
-
+        
         res.json({
             _id: user._id,
             username: user.username,
