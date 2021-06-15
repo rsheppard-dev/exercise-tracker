@@ -8,9 +8,9 @@ const exerciseRouter = require('./routers/exercise')
 
 const app = express()
 
+app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(userRouter, exerciseRouter)
-app.use(cors())
 app.use(express.static('public'))
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
