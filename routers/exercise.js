@@ -5,7 +5,7 @@ const fetchUserData = require('../middleware/fetchUserData')
 const router = express.Router()
 
 // log a new exercise for user
-router.post('/api/users/:id/exercises', fetchUserData, async (req, res) => {
+router.post('/api/users/:_id/exercises', fetchUserData, async (req, res) => {
     const user = req.user
     const exercise = new Exercise({
         description: req.body.description,
