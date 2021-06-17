@@ -5,10 +5,10 @@ const router = express.Router()
 
 // create new user
 router.post('/api/users', async (req, res) => {
-    const { _id, username} = new User(req.body)
+    const user = new User(req.body)
 
     try {
-        await user.save()
+        const { _id, username } = await user.save()
         
         res.json({
             _id,
