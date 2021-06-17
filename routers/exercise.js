@@ -10,7 +10,7 @@ router.post('/api/users/:_id/exercises', fetchUserData, async (req, res) => {
     const exercise = new Exercise({
         description: req.body.description,
         duration: parseInt(req.body.duration),
-        date: req.body.date ? new Date(req.body.date) : undefined,
+        date: req.body.date ? new Date(req.body.date) : Date.now(),
         owner: req.body[':_id']
     })
     
