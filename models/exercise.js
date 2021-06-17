@@ -3,12 +3,9 @@ const mongoose = require('mongoose')
 const exerciseSchema = new mongoose.Schema({
     description: {
         type: String,
-        trim: true,
-        required: true
     },
     duration: {
         type: Number,
-        required: true
     },
     date: {
         type: Date,
@@ -16,7 +13,6 @@ const exerciseSchema = new mongoose.Schema({
     },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
         ref: 'User'
     }
 })
