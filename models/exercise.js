@@ -2,12 +2,10 @@ const mongoose = require('mongoose')
 
 const exerciseSchema = new mongoose.Schema({
     description: {
-        type: String,
-        required: true
+        type: String
     },
     duration: {
-        type: Number,
-        required: true
+        type: Number
     },
     date: {
         type: Date,
@@ -15,8 +13,7 @@ const exerciseSchema = new mongoose.Schema({
     },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
+        ref: 'User'
     }
 })
 
