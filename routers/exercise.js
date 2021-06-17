@@ -33,12 +33,12 @@ router.post('/api/users/:_id/exercises', fetchUserData, async (req, res) => {
 router.get('/api/users/:_id/logs', fetchUserData, async (req, res) => {
     const user = req.user
     const find = {}
-    const start = req.query.from && new Date(req.query.from)
-    const end = req.query.to && new Date(req.query.to)
+    const from = req.query.from && new Date(req.query.from)
+    const to = req.query.to && new Date(req.query.to)
     
     if (start && end) find.date = {
-        '$gte': start,
-        '$lte': end
+        '$gte': from,
+        '$lte': to
     }
     
     try {
@@ -46,8 +46,7 @@ router.get('/api/users/:_id/logs', fetchUserData, async (req, res) => {
             path: 'exercises',
             options: {
                 limit: parseInt(req.query.limit),
-                find,
-                sort: { date: -1 }
+                find
             }
         }).execPopulate()
 
