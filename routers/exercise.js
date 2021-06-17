@@ -36,7 +36,7 @@ router.get('/api/users/:_id/logs', fetchUserData, async (req, res) => {
     const from = req.query.from && new Date(req.query.from)
     const to = req.query.to && new Date(req.query.to)
     
-    if (start && end) find.date = {
+    if (from && to) find.date = {
         '$gte': from,
         '$lte': to
     }
