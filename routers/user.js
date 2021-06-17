@@ -5,15 +5,15 @@ const router = express.Router()
 
 // create new user
 router.post('/api/users', async (req, res) => {
-    User.init()
-        .then(async () => {
-            const user = new User(req.body)
-            const result = await user.save()
-            res.json(result)
-        })
-        .catch(error => {
-            res.json(error.message)
-        })
+    const user = new User(req.body)
+
+    try {
+        await user.save()
+        
+        res.json(user)
+    } catch (error) {
+        res.json(error)
+    }
 })
 
 // get list of all users

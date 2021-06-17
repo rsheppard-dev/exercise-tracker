@@ -7,8 +7,6 @@ const fetchUserData = async (req, res, next) => {
 
     try {
         const user = await User.findById(_id)
-        
-        if (!user) throw new Error()
 
         req.user = user
 
