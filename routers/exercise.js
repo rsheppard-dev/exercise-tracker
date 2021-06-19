@@ -11,7 +11,7 @@ router.post('/api/users/:_id/exercises', fetchUserData, async (req, res) => {
         description: req.body.description,
         duration: parseInt(req.body.duration),
         date: !req.body.date ? Date.now() : new Date(req.body.date),
-        owner: req.body[':_id']
+        userId: user._id
     })
     
     try {
@@ -35,34 +35,31 @@ router.get('/api/users/:_id/logs', fetchUserData, async (req, res) => {
     const find = {}
     const from = req.query.from && new Date(req.query.from)
     const to = req.query.to && new Date(req.query.to)
+    const limit = req.query.limit && parseInt(req.query.limit)
     
-    if (from && to) find.date = {
-        '$gte': from,
-        '$lte': to
-    }
-    
-    try {
-        await user.populate({
-            path: 'exercises',
-            options: {
-                limit: parseInt(req.query.limit),
-                find
-            }
-        }).execPopulate()
+    find.userId = user._id
 
-        const exerciseLog = user.exercises.map(exercise => {
-            return {
-                description: exercise.description,
-                duration: exercise.duration,
-                date: exercise.date.toDateString()
-            }
-        })        
+    if (from && to)
+        find.date = {
+            $gte: from,
+            $lte: to
+        }
+
+    try {
+        const exerciseLog = await Exercise.find(find, 'description duration date')
+            .limit(limit)        
         
         res.json({
             _id: user._id,
             username: user.username,
-            count: user.exercises.length,
-            log: exerciseLog
+            count: exerciseLog.length,
+            log: exerciseLog.map(exercise => {
+                return {
+                    description: exercise.description,
+                    duration: exercise.duration,
+                    date: exercise.date.toDateString()
+                }
+            })
         })
     } catch (error) {
         res.json(error)

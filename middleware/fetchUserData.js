@@ -12,7 +12,7 @@ const fetchUserData = async (req, res, next) => {
 
         next()
     } catch (error) {
-        res.json({error: 'No such user exists!'})
+        res.send(error.message)
     }
 }
 

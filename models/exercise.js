@@ -10,9 +10,8 @@ const exerciseSchema = new mongoose.Schema({
     date: {
         type: Date
     },
-    owner: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+    userId: {
+        type: String
     }
 })
 
