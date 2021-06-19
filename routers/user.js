@@ -15,6 +15,9 @@ router.post('/api/users', async (req, res) => {
             username
         })
     } catch (error) {
+        if (error.name === 'MongoError' && error.code === 11000)
+            return res.send('Username is already taken!')
+            
         res.json(error)
     }
 })
