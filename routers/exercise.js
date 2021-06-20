@@ -36,22 +36,29 @@ router.get('/api/users/:_id/logs', fetchUserData, async (req, res) => {
     const from = req.query.from && new Date(req.query.from)
     const to = req.query.to && new Date(req.query.to)
     const limit = req.query.limit && parseInt(req.query.limit)
-    
+    const filterData = {
+        _id: user._id,
+        username: user.username
+    }
+
     find.userId = user._id
 
-    if (from && to)
+    if (from && to) {
         find.date = {
             $gte: from,
             $lte: to
         }
+
+        filterData.from = from.toDateString()
+        filterData.to = to.toDateString()
+    }
 
     try {
         const exerciseLog = await Exercise.find(find, 'description duration date')
             .limit(limit)        
         
         res.json({
-            _id: user._id,
-            username: user.username,
+            ...filterData,
             count: exerciseLog.length,
             log: exerciseLog.map(exercise => {
                 return {
