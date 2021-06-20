@@ -32,16 +32,11 @@ router.post('/api/users/:_id/exercises', fetchUserData, async (req, res) => {
 // get a log of users exercises
 router.get('/api/users/:_id/logs', fetchUserData, async (req, res) => {
     const user = req.user
-    const find = {}
     const from = req.query.from && new Date(req.query.from)
     const to = req.query.to && new Date(req.query.to)
     const limit = req.query.limit && parseInt(req.query.limit)
-    const filterData = {
-        _id: user._id,
-        username: user.username
-    }
-
-    find.userId = user._id
+    const find = { userId: user._id }
+    const filterData = { _id: user._id, username: user.username }
 
     if (from && to) {
         find.date = {
@@ -54,7 +49,8 @@ router.get('/api/users/:_id/logs', fetchUserData, async (req, res) => {
     }
 
     try {
-        const exerciseLog = await Exercise.find(find, 'description duration date')
+        const exerciseLog = await Exercise
+            .find(find, 'description duration date')
             .limit(limit)        
         
         res.json({
